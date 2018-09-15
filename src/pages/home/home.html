@@ -7,8 +7,36 @@
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <div class="container">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12>
+          <ion-item>
+            <ion-label floating>Username</ion-label>
+            <ion-input name="username" [(ngModel)]="username" type=""></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Filas</ion-label>
+            <ion-select name="row" [(ngModel)]="row">
+              <ion-option value="2">2</ion-option>
+              <ion-option value="3">3</ion-option>
+              <ion-option value="4">4</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Columnas</ion-label>
+            <ion-select name="col" [(ngModel)]="col">
+              <ion-option value="2">2</ion-option>
+              <ion-option value="3">3</ion-option>
+              <ion-option value="4">4</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <button ion-button full (click)="onSubmit()">Jugar</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
