@@ -13,6 +13,12 @@ export interface INumeros {
   status: boolean
 }
 
+export interface ICompare {
+  id:number;
+  index: number;
+  array:string;
+}
+
 @IonicPage()
 @Component({
   selector: 'page-game',
@@ -21,32 +27,168 @@ export interface INumeros {
 
 
 export class GamePage {
-  imagesA:any;
-  imagesATwo:any;
+  imagesA:any = [];
+  imagesATwo:any = [];
   contFront = 0;
+  user:string = '';
+  comeBack: boolean = false;
+  classGrid:any;
+
+  points:number = 0;
+
+  arrayCompare:Array<ICompare> = [];
+  
   j:number = 0;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public generalConfigProvider:GeneralConfigProvider) {
-      this.imagesA = generalConfigProvider.finaArray;
+      this.user = this.generalConfigProvider.username;
+      this.imagesA = JSON.parse(JSON.stringify(generalConfigProvider.finaArray));
+      this.imagesATwo = JSON.parse(JSON.stringify(generalConfigProvider.finaArray));
+
+       
+
+      if(generalConfigProvider.col === '2') {
+        this.classGrid = "col-2"
+      } else if(generalConfigProvider.col === '3'){
+        this.classGrid = "col-3"
+      }
+      else {
+        this.classGrid = "col-4"
+      }
+
       this.imagesA = this.shuffleArray(this.imagesA);
-      
-      this.imagesATwo = generalConfigProvider.finaArray;
+      console.log('this.imagesA: ', this.imagesA);
       this.imagesATwo = this.shuffleArray(this.imagesATwo);
       console.log('this.imagesATwo: ', this.imagesATwo);
-      console.log('this.imagesA: ', this.imagesA);
   }
 
   flipImg(index:number){
-    console.log(index);
-    
-    this.imagesA[index].visible = !this.imagesA[index].visible;
+
+    if(this.contFront >= 2){
+       console.log('verificar el otro array');
+    } else {
+      this.imagesA[index].visible = !this.imagesA[index].visible;
+      this.arrayCompare.push({id:this.imagesA[index].num, index: index, array:'imagesA' });
+      this.contFront++;
+
+      if(this.contFront === 2){
+        this.verificar()
+        this.checkBothArray()
+      }
+    }    
   }
 
   flipImgTwo(index:number){
-    console.log(index);
-    this.imagesATwo[index].visible = !this.imagesATwo[index].visible;
+    if(this.contFront >= 2){
+      console.log('verificar el otro array');
+   } else {
+     this.imagesATwo[index].visible = !this.imagesATwo[index].visible;
+     this.arrayCompare.push({id: this.imagesATwo[index].num, index: index, array:'imagesATwo' });
+     this.contFront++;
+
+     if(this.contFront === 2){
+      this.verificar();
+      this.checkBothArray()
+      console.log(this.points);
+      
+      
+    }
+   } 
+  }
+
+
+  verificar(){
+    
+    let numOne = this.arrayCompare[0];
+    let numTwo = this.arrayCompare[1];
+
+    if(numOne.array === numTwo.array){
+      if(numOne.array === 'imagesA'){
+        setTimeout(() => {
+          console.log(1);
+          
+          this.imagesA[numOne.index].visible = !this.imagesA[numOne.index].visible;
+          this.imagesA[numTwo.index].visible = !this.imagesA[numTwo.index].visible;
+          this.arrayCompare = [];
+          this.contFront = 0;
+          this.points === 0 ? this.points = 0 : this.points--;
+         
+        }, 1000);
+
+      } else {
+        setTimeout(() => {
+          console.log(2);
+          this.imagesATwo[numOne.index].visible = !this.imagesATwo[numOne.index].visible;
+          this.imagesATwo[numTwo.index].visible = !this.imagesATwo[numTwo.index].visible;
+          this.arrayCompare = [];
+          this.contFront = 0;
+          this.points === 0 ? this.points = 0 : this.points--;
+          
+        }, 1000);
+      }
+
+    } else {
+      console.log('numOne: ', numOne);
+      console.log('numTwo: ', numTwo);
+      
+      if(numOne.array === 'imagesA' && numTwo.array === 'imagesATwo'){
+        if(this.imagesA[numOne.index].num === this.imagesATwo[numTwo.index].num){
+          console.log('Son iguales');
+          this.points++;
+          this.contFront = 0;
+          this.arrayCompare = [];
+        } else {
+          console.log('entro');
+          
+          setTimeout(()=>{
+  
+            this.imagesA[numOne.index].visible = !this.imagesA[numOne.index].visible;
+            this.imagesATwo[numTwo.index].visible = !this.imagesATwo[numTwo.index].visible;
+            this.arrayCompare = [];
+            this.contFront = 0;
+            this.points === 0 ? this.points = 0 : this.points--;
+            console.log('No son iguales');
+          }, 1000)
+          
+        }
+      } else {
+        if(this.imagesA[numTwo.index].num === this.imagesATwo[numOne.index].num){
+          console.log('Son iguales');
+          this.points++;
+          this.contFront = 0;
+          this.arrayCompare = [];
+        } else {
+          console.log('entro');
+          
+          setTimeout(()=>{
+  
+            this.imagesA[numTwo.index].visible = !this.imagesA[numTwo.index].visible;
+            this.imagesATwo[numOne.index].visible = !this.imagesATwo[numOne.index].visible;
+            this.arrayCompare = [];
+            this.contFront = 0;
+            this.points === 0 ? this.points = 0 : this.points--;
+            console.log('No son iguales');
+          }, 1000)
+          
+        }
+
+      }
+      
+    }
+
+  }
+
+  checkBothArray(){
+    let cantI = 0
+    
+    for (let index = 0; index < this.imagesA.length; index++) {
+      this.imagesA[index].visible  === true ? cantI++ : console.log('kjlkjlkj');
+    }
+    this.imagesA.length  === cantI ? this.comeBack = true : this.comeBack = false;
+
+    
   }
 
   shuffleArray(array) {
@@ -68,5 +210,6 @@ export class GamePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad GamePage');
   }
+
 
 }
