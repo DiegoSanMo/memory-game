@@ -15,24 +15,23 @@
 
 <ion-content padding>
 
+  <h1>{{user}}</h1>
+  <label for="">{{points}}</label>
   <ion-grid>
     <ion-row>
 
-      <ion-col col-12  col-md-2 *ngFor="let image of imagesA; let i = index;">
-        <ion-card class="card-background-page" (click)="flipImg(i)">
-          <img [src]="image.backUrl" *ngIf="!image.visible">
-          <img [src]="image.frontUrl" *ngIf="image.visible">
-        </ion-card>
-      </ion-col>
+      <ion-card class="card-background-page" [ngClass]="classGrid" (click)="flipImg(i)" *ngFor="let image of imagesA; let i = index;">
+        <img [src]="image.backUrl" *ngIf="!image.visible">
+        <img [src]="image.frontUrl" *ngIf="image.visible">
+      </ion-card>
+     
 
-      <ion-col col-12  col-md-2 *ngFor="let image of imagesATwo; let i = index;">
-        <ion-card class="card-background-page" (click)="flipImgTwo(i)">
-          <img [src]="image.backUrl" *ngIf="!image.visible">
-          <img [src]="image.frontUrl" *ngIf="image.visible">
-        </ion-card>
-      </ion-col>
+      <ion-card class="card-background-page" [ngClass]="classGrid" (click)="flipImgTwo(i)" *ngFor="let image of imagesATwo; let i = index;">
+        <img [src]="image.backUrl" *ngIf="!image.visible">
+        <img [src]="image.frontUrl" *ngIf="image.visible">
+      </ion-card>
+     
       
     </ion-row>
-  </ion-grid>
-    
+  </ion-grid>  
 </ion-content>
