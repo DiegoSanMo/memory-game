@@ -16,13 +16,13 @@ export class HomePage {
   onSubmit(){
     this.generalConfigProvider.col = this.col;
     this.generalConfigProvider.row = this.row;
+    this.generalConfigProvider.username = this.username;
     this.generalConfigProvider.cantPictures = parseInt(this.row) * parseInt(this.col);
     this.arrayRandom(this.generalConfigProvider.cantPictures)
     this.navCtrl.push('GamePage')
   }
 
   arrayRandom(quantityP:number){   
-    let q = quantityP;
     let ban:boolean = false;
     let i, f;
     while(!ban){
